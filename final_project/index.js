@@ -12,6 +12,17 @@ app.use("/customer",session({secret:"fingerprint_customer",resave: true, saveUni
 
 app.use("/customer/auth/*", function auth(req,res,next){
 //Write the authenication mechanism here
+if (req.session && req.session.accessToken) {
+    jwt.verify(req.session.accessToken, "your_jwt_secret_key", (err, decoded) => {
+        if (err) {
+            return res.status(403).json({ message: "Unauthorized access, invalid token" });
+        }
+req.user = decoded;
+         next();
+  });
+} else {
+      return res.status(401).json({ message: "Unauthorized access, token required" });
+}
 });
  
 const PORT =5000;
@@ -19,4 +30,4 @@ const PORT =5000;
 app.use("/customer", customer_routes);
 app.use("/", genl_routes);
 
-app.listen(PORT,()=>console.log("Server is running"));
+app.listen(PORT,()=>console.log(`"Server is running at port ${PORT}"`));
