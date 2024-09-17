@@ -15,7 +15,7 @@ app.use("/customer/auth/*", function auth(req,res,next){
 if (req.session && req.session.accessToken) {
     jwt.verify(req.session.accessToken, "your_jwt_secret_key", (err, decoded) => {
         if (err) {
-            return res.status(403).json({ message: "Unauthorized access" });
+            return res.status(403).json({ message: "Unauthorized access, invalid token" });
         }
 req.user = decoded;
          next();
