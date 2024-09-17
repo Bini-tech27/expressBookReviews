@@ -15,7 +15,7 @@ app.use("/customer/auth/*", function auth(req,res,next){
 if (req.session && req.session.accessToken) {
     jwt.verify(req.session.accessToken, "your_jwt_secret_key", (err, decoded) => {
         if (err) {
-            return res.status(403).json({ message: "Unauthorized access, invalid token" });
+            return res.status(403).json({ message: "Unauthorized access" });
         }
 req.user = decoded;
          next();
@@ -28,6 +28,6 @@ req.user = decoded;
 const PORT =5000;
 
 app.use("/customer", customer_routes);
-app.use("/", public_user);
+app.use("/", genl_routes);
 
 app.listen(PORT,()=>console.log(`"Server is running at port ${PORT}"`));
